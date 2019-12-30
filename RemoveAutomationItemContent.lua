@@ -26,12 +26,10 @@ function enumAllCCMidis()
       -- remember here what to ditch 
       reaper.ShowConsoleMsg(getEventResult.msg .. ' - ppqpos  ' .. tostring(midiCC.ppqpos) .. ' chanmsg ' .. tostring(midiCC.chanmsg) .. ' chan ' .. tostring(midiCC.chan) .. ' msg2 ' .. tostring(midiCC.msg2) .. ' msg3 ' .. midiCC.msg3 .. '\n')
       
-      if midiCC.msg2 == 1 then
-        reaper.ShowConsoleMsg('case 1 detected')
-      elseif midiCC.msg2 == 11 then
-        reaper.ShowConsoleMsg('case 11 detected')
+      if (midiCC.msg2 == 1 or midiCC.msg2 == 11) then
+        reaper.ShowConsoleMsg('skipping: case 1 or 11 detected\n')
       else
-        reaper.ShowConsoleMsg('indexesNumber' .. tostring(indexesNumber) .. '  ' .. tostring(ccidx) .. ' msg2 value: ' .. tostring(msg2) .. '\n')
+        reaper.ShowConsoleMsg('indexesNumber' .. tostring(indexesNumber) .. '  ' .. tostring(ccidx) .. ' msg2 value: ' .. tostring(midiCC.msg2) .. '\n')
         indexes2Delete[indexesNumber] = ccidx
         indexesNumber = indexesNumber + 1
       end
@@ -43,7 +41,7 @@ function enumAllCCMidis()
       local ccidx = indexes2Delete[indexesNumber]
       
       reaper.ShowConsoleMsg('deleteing # ' .. tostring(indexesNumber) .. ' on index ' .. tostring(ccidx) .. '\n')
-      local deleteResult = true -- reaper.MIDI_DeleteCC(take, ccidx)
+      local deleteResult = reaper.MIDI_DeleteCC(take, ccidx)
       if not deleteResult then
         reaper.ShowConsoleMsg('Unable to delete CC on ' .. tostring(ccidx))
       end
