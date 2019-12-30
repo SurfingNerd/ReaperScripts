@@ -2,49 +2,65 @@
 reaper.ShowConsoleMsg('Getting Started!')
 
 function enumAllCCMidis()
-
   local count_items = reaper.CountMediaItems(0) -- Count All Media items once
+  for j = 0, count_items - 1 do
 
-		for j = 0, count_items - 1 do
-      local item = reaper.GetMediaItem(0, j) -- Get item
-      local take = reaper.GetTake(item, 0)
-
-      retval, notes, ccs, sysex = reaper.MIDI_CountEvts(take)
-
+    reaper.ShowConsoleMsg('processing media item # ' .. tostring(j))
       
-      for ccidx = 0, ccs - 1 do
-        midiCC = {}
-        retval, midiCC.selected, midiCC.muted, midiCC.ppqpos, midiCC.chanmsg, midiCC.chan, midiCC.msg2, midiCC.msg3 = reaper.MIDI_GetCC(take, ccidx)
+    local item = reaper.GetMediaItem(0, j) -- Get item
+    local take = reaper.GetTake(item, 0)
 
-        getEventResult = {}
-        retval, getEventResult.selected, getEventResult.muted, getEventResult.ppqpos, getEventResult.msg = reaper.MIDI_GetEvt(take, ccidx, midiCC.selected, midiCC.muted, midiCC.ppqpos,'')
-      
+    retval, notes, ccs, sysex = reaper.MIDI_CountEvts(take)
+
+    local indexes2Delete = {}
+    local indexesNumber = 0 
+    
+    for ccidx = 0, ccs - 1 do
+      midiCC = {}
+      retval, midiCC.selected, midiCC.muted, midiCC.ppqpos, midiCC.chanmsg, midiCC.chan, midiCC.msg2, midiCC.msg3 = reaper.MIDI_GetCC(take, ccidx)
+      getEventResult = {}
+      retval, getEventResult.selected, getEventResult.muted, getEventResult.ppqpos, getEventResult.msg = reaper.MIDI_GetEvt(take, ccidx, midiCC.selected, midiCC.muted, midiCC.ppqpos,'')
+    
       -- local midiCC = reaper.MIDI_GetCC( take, ccidx)
-
       -- msg2 is the cc we are looking for. we need 1 and 11, and ditch the rest.
       -- remember here what to ditch 
-
-        reaper.ShowConsoleMsg(getEventResult.msg .. ' - ppqpos  ' .. tostring(midiCC.ppqpos) .. ' chanmsg ' .. tostring(midiCC.chanmsg) .. ' chan ' .. tostring(midiCC.chan) .. ' msg2 ' .. tostring(midiCC.msg2) .. ' msg3 ' .. midiCC.msg3 .. '\n')
+      reaper.ShowConsoleMsg(getEventResult.msg .. ' - ppqpos  ' .. tostring(midiCC.ppqpos) .. ' chanmsg ' .. tostring(midiCC.chanmsg) .. ' chan ' .. tostring(midiCC.chan) .. ' msg2 ' .. tostring(midiCC.msg2) .. ' msg3 ' .. midiCC.msg3 .. '\n')
+      
+      if midiCC.msg2 == 1 then
+        reaper.ShowConsoleMsg('case 1 detected')
+      elseif midiCC.msg2 == 11 then
+        reaper.ShowConsoleMsg('case 11 detected')
+      else
+        reaper.ShowConsoleMsg('indexesNumber' .. tostring(indexesNumber) .. '  ' .. tostring(ccidx) .. ' msg2 value: ' .. tostring(msg2) .. '\n')
+        indexes2Delete[indexesNumber] = ccidx
+        indexesNumber = indexesNumber + 1
       end
-
-      --boolean retval, boolean selected, boolean muted, number ppqpos, number chanmsg, number chan, number msg2, number msg
-
-      -- reaper.ShowConsoleMsg(' got a cc ' .. tostring(midiCC))
-
-
     end
 
-    -- start ditching Cc here.
+    while indexesNumber > 0
+    do
+      indexesNumber = indexesNumber - 1
+      local ccidx = indexes2Delete[indexesNumber]
+      
+      reaper.ShowConsoleMsg('deleteing # ' .. tostring(indexesNumber) .. ' on index ' .. tostring(ccidx) .. '\n')
+      local deleteResult = true -- reaper.MIDI_DeleteCC(take, ccidx)
+      if not deleteResult then
+        reaper.ShowConsoleMsg('Unable to delete CC on ' .. tostring(ccidx))
+      end
+    end
+
+  -- start ditching Cc here.
     --reaper.MIDI_DeleteCC(MediaItem_Take take, integer ccidx)
+  end
 end
 
 function enumAllTracks()
 
   local trackCount = reaper.CountTracks(0)
-  	-- Loop in Tracks
-  for i = 0, trackCount - 1 do	
-		local track = reaper.GetTrack(0, i)
-		guid = reaper.GetTrackGUID( track )
+    -- Loop in Tracks
+  for i = 0, trackCount - 1 do  
+    local track = reaper.GetTrack(0, i)
+    guid = reaper.GetTrackGUID( track )
   
     local channelNumber = reaper.GetMediaTrackInfo_Value(track, 'I_RECINPUT')     -- 'I_RECINPUT' means Channel ?!
     local recMode =  reaper.GetMediaTrackInfo_Value(track, 'I_RECMODE');
