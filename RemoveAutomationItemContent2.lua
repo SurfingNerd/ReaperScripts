@@ -1,43 +1,6 @@
 
 reaper.ShowConsoleMsg('Getting Started!')
 
-function enumAllCCMidis()
-
-  local count_items = reaper.CountMediaItems(0) -- Count All Media items once
-
-		for j = 0, count_items - 1 do
-      local item = reaper.GetMediaItem(0, j) -- Get item
-      local take = reaper.GetTake(item, 0)
-
-      retval, notes, ccs, sysex = reaper.MIDI_CountEvts(take)
-
-      
-      for ccidx = 0, ccs - 1 do
-        midiCC = {}
-        retval, midiCC.selected, midiCC.muted, midiCC.ppqpos, midiCC.chanmsg, midiCC.chan, midiCC.msg2, midiCC.msg3 = reaper.MIDI_GetCC(take, ccidx)
-
-        getEventResult = {}
-        retval, getEventResult.selected, getEventResult.muted, getEventResult.ppqpos, getEventResult.msg = reaper.MIDI_GetEvt(take, ccidx, midiCC.selected, midiCC.muted, midiCC.ppqpos,'')
-      
-      -- local midiCC = reaper.MIDI_GetCC( take, ccidx)
-
-      -- msg2 is the cc we are looking for. we need 1 and 11, and ditch the rest.
-      -- remember here what to ditch 
-
-        reaper.ShowConsoleMsg(getEventResult.msg .. ' - ppqpos  ' .. tostring(midiCC.ppqpos) .. ' chanmsg ' .. tostring(midiCC.chanmsg) .. ' chan ' .. tostring(midiCC.chan) .. ' msg2 ' .. tostring(midiCC.msg2) .. ' msg3 ' .. midiCC.msg3 .. '\n')
-      end
-
-      --boolean retval, boolean selected, boolean muted, number ppqpos, number chanmsg, number chan, number msg2, number msg
-
-      -- reaper.ShowConsoleMsg(' got a cc ' .. tostring(midiCC))
-
-
-    end
-
-    -- start ditching Cc here.
-    --reaper.MIDI_DeleteCC(MediaItem_Take take, integer ccidx)
-end
-
 function enumAllTracks()
 
   local trackCount = reaper.CountTracks(0)
@@ -63,7 +26,7 @@ function enumAllTracks()
 
     for iEnvelope=0,envelopeCount-1 do
 
-      local trackEnvelope = reaper.GetTrackEnvelope(track, iEnvelope)
+      local trackEnvelope = reaper.GetTrackEnvelope(track, iEnvelope);
       local automationItemCount = reaper.CountAutomationItems(trackEnvelope)
       
       reaper.ShowConsoleMsg('Envelope: ' .. tostring(envelopeCount) .. ' ' .. tostring(automationItemCount))
@@ -80,20 +43,13 @@ function enumAllTracks()
       envelopeCount = envelopeCount + 1
     end
 
+    local take = reaper.GetTake(MediaItem item, integer takeidx);
 
-
-    local take = reaper.GetTake(track, 0)
-
-    local ccidx = 0
-    --boolean retval, boolean selected, boolean muted, number ppqpos, number chanmsg, number chan, number msg2, number msg
-    local midiCC = reaper.MIDI_GetCC( take, ccidx)
-    reaper.ShowConsoleMsg('ppqpos  ' .. tostring(midiCC.ppqpos) .. ' chanmsg ' .. tostring(midiCC.chanmsg) .. ' chan ' .. tostring(midiCC.chan) .. ' msg2 ' .. tostring(midiCC.msg2))
 
   end
 end
 
 reaper.ShowConsoleMsg('start enum all tracks')
---enumAllTracks();
-enumAllCCMidis();
+enumAllTracks();
 reaper.ShowConsoleMsg('end enum all tracks')
 
