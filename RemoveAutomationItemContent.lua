@@ -22,9 +22,8 @@ function enumAllTracks()
       .. ' hwindex ' .. hwindex .. ' nchan ' .. nchan .. ' recMode ' .. recMode .. ' channelNumber: ' 
       .. channelNumber .. ' envelopeCount: ' .. tostring(envelopeCount) .. '\n')
 
-    -- here is the problem: the Tracks do nat have a TrackEnvelope.
+    -- here is the problem: the Tracks do not have a TrackEnvelope.
 
-    -- envelopeCount = 1
     for iEnvelope=0,envelopeCount-1 do
 
       local trackEnvelope = reaper.GetTrackEnvelope(track, iEnvelope);
