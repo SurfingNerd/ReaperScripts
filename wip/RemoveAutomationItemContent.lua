@@ -1,3 +1,32 @@
+--[[
+ * ReaScript Name: Insert CC linear ramp events between selected ones if consecutive
+ * Description: Interpolate multiple CC events by creating new ones. Works with multiple lanes (CC Channel).
+ * Instructions: Open a MIDI take in MIDI Editor. Select Notes. Run.
+ * Screenshot: http://i.giphy.com/3o6UB8vDPviM8jbXlC.gif
+ * Author: SurfingNerd
+ * Author URI: https://github.com/SurfingNerd
+ * Repository: GitHub > SurfingNerd > ReaperScripts
+ * Repository URI: https://github.com/SurfingNerd/ReaperScripts
+ * Licence: GPL v3
+ * REAPER: 6.0
+ * Extensions: None
+ * Version: 0.1
+--]]
+
+--[[
+ * Changelog:
+	+ Initial Release
+--]]
+
+-- USER CONFIG AREA ---------------------
+
+interval = "2"
+prompt = true -- User input dialog box
+selected = false -- new notes are selected
+
+----------------- END OF USER CONFIG AREA
+
+
 
 reaper.ShowConsoleMsg('Getting Started!')
 
