@@ -1,2 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="SurfingNerd ReaScripts"/>
+<index version="1" name="SurfingNerd ReaScripts" commit="79bd6a21ffe04326f91d8fe0c773b04ef99674cc">
+  <category name="wip">
+    <reapack name="RemoveAutomationItemContent.lua" type="script" desc="Insert CC linear ramp events between selected ones if consecutive">
+      <metadata>
+        <link rel="screenshot">http://i.giphy.com/3o6UB8vDPviM8jbXlC.gif</link>
+      </metadata>
+      <version name="0.1" author="SurfingNerd" time="2020-01-02T08:41:56Z">
+        <source main="main">https://github.com/SurfingNerd/ReaperScripts/raw/79bd6a21ffe04326f91d8fe0c773b04ef99674cc/wip/RemoveAutomationItemContent.lua</source>
+      </version>
+    </reapack>
+  </category>
+</index>
